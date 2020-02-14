@@ -1,0 +1,4 @@
+.vs
+*.pdb
+EasyWatermark/bin
+EasyWatermark/obj
