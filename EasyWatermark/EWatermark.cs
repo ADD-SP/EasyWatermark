@@ -26,12 +26,24 @@ namespace EasyWatermark
         /// <returns>反汇一张带有水印文字的图片</returns>
         public static Image GetWatermark(string text, int size, FontFamily fontFamily ,Color color, int alpha)
         {
-            Bitmap bitmap = new Bitmap(size * text.Length, size);
-            bitmap.MakeTransparent();
-            Brush brush = new SolidBrush(Color.FromArgb(200, color));
-            new Font("宋体", 10);
+            Brush brush = new SolidBrush(Color.FromArgb(alpha, color));
             Font font = new Font(fontFamily, size, GraphicsUnit.Pixel);
+
+            // 随便创建一个bitmap用来给Graphics实例化用
+            Bitmap bitmap = new Bitmap(size * text.Length, size);
+            // 随便实例化一个Graphics用来测量文字的宽度
             Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.PageUnit = GraphicsUnit.Pixel;
+            // 测量要绘制的字体的宽和高
+            SizeF fontWidthAndHeight = graphics.MeasureString(text, font);
+
+            bitmap.Dispose(); 
+            graphics.Dispose();
+            
+            // 正式创建容纳文字的位图
+            bitmap = new Bitmap((int)fontWidthAndHeight.Width, (int)fontWidthAndHeight.Height);
+            graphics = Graphics.FromImage(bitmap);
+            // 设置背景透明
             graphics.Clear(Color.FromArgb(0, 0, 0, 0));
             // 下面的三行用于去除绘图是的黑色阴影，具体为啥有用我也不懂，似乎是图像处理领域的知识，
             graphics.SmoothingMode = SmoothingMode.HighSpeed;
@@ -81,10 +93,14 @@ namespace EasyWatermark
             Image ret = taeget.Clone() as Image;
             watermark.RotateFlip(RotateFlipType.Rotate180FlipNone);
             Graphics graphics = Graphics.FromImage(ret);
+            graphics.SmoothingMode = SmoothingMode.HighQuality;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
             // 将坐标系平移到右下角
             graphics.TranslateTransform(graphics.VisibleClipBounds.Width, graphics.VisibleClipBounds.Height);
             // 顺时针旋转坐标系180度
             graphics.RotateTransform(180);
+            graphics.PageUnit = GraphicsUnit.Pixel;
             graphics.DrawImage(watermark, new Point(10, 10));
             graphics.Save();
             graphics.Dispose();
