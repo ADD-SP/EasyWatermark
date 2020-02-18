@@ -55,7 +55,7 @@ namespace EasyWatermark
             return bitmap;
         }
 
-        private static Image _GetWatermark(string filename)
+        private static Image GetWatermark(string filename)
         {
             return Image.FromFile(filename);
         }
@@ -68,7 +68,7 @@ namespace EasyWatermark
         /// <returns>返回添加水印后图片</returns>
         public static Image AddWatermark(string targetFileName, string watermarkFileName)
         {
-            return AddWatermark(Image.FromFile(targetFileName), _GetWatermark(watermarkFileName));
+            return AddWatermark(Image.FromFile(targetFileName), GetWatermark(watermarkFileName));
         }
 
         /// <summary>
