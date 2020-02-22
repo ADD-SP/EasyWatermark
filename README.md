@@ -1,8 +1,8 @@
 # EasyWatermark
 
-方便地为图片添加水印的库。
+方便地为图片添加水印的库。默认添加到右下角。坐标系原点也为右下角。
 
-A library to add watermarks to pictures.
+A library that can add watermark at specified coordinates. The default position is the lower right corner. The origin of the coordinate is in the lower right corner.
 
 # Build
 

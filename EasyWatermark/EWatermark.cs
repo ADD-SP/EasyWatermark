@@ -75,6 +75,32 @@ namespace EasyWatermark
         /// 为指定图片添加指定的水印
         /// </summary>
         /// <param name="targetFileName">需要添加的水印图片的路径</param>
+        /// <param name="watermarkFileName">作为水印的图片的路径</param>
+        /// <param name="x">水印x坐标（右下角为原点</param>
+        /// <param name="y">水印y坐标（右下角为原点></param>
+        /// <returns>返回添加水印后图片</returns>
+        public static Image AddWatermark(string targetFileName, string watermarkFileName, float x, float y)
+        {
+            return AddWatermark(Image.FromFile(targetFileName), GetWatermark(watermarkFileName), x, y);
+        }
+
+        /// <summary>
+        /// 为指定图片添加指定的水印
+        /// </summary>
+        /// <param name="targetFileName">需要添加的水印图片的路径</param>
+        /// <param name="watermark">作为水印的图片</param>
+        /// <param name="x">水印x坐标（右下角为原点</param>
+        /// <param name="y">水印y坐标（右下角为原点></param>
+        /// <returns>返回添加水印后图片</returns>
+        public static Image AddWatermark(string targetFileName, Image watermark, float x, float y)
+        {
+            return AddWatermark(Image.FromFile(targetFileName), watermark, x, y);
+        }
+
+        /// <summary>
+        /// 为指定图片添加指定的水印
+        /// </summary>
+        /// <param name="targetFileName">需要添加的水印图片的路径</param>
         /// <param name="watermark">作为水印的图片</param>
         /// <returns>返回添加水印后图片</returns>
         public static Image AddWatermark(string targetFileName, Image watermark)
@@ -90,6 +116,19 @@ namespace EasyWatermark
         /// <returns>返回添加水印后图片</returns>
         public static Image AddWatermark(Image taeget, Image watermark)
         {
+            return AddWatermark(taeget, watermark, 10, 10);
+        }
+
+        /// <summary>
+        /// 为指定图片添加指定的水印
+        /// </summary>
+        /// <param name="taeget">需要添加水印的图片</param>
+        /// <param name="watermark">作为水印的图片</param>
+        /// <param name="x">水印x坐标（右下角为原点</param>
+        /// <param name="y">水印y坐标（右下角为原点></param>
+        /// <returns>返回添加水印后图片</returns>
+        public static Image AddWatermark(Image taeget, Image watermark, float x, float y)
+        {
             Image ret = taeget.Clone() as Image;
             watermark.RotateFlip(RotateFlipType.Rotate180FlipNone);
             Graphics graphics = Graphics.FromImage(ret);
@@ -101,7 +140,7 @@ namespace EasyWatermark
             // 顺时针旋转坐标系180度
             graphics.RotateTransform(180);
             graphics.PageUnit = GraphicsUnit.Pixel;
-            graphics.DrawImage(watermark, new Point(10, 10));
+            graphics.DrawImage(watermark, new PointF(x, y));
             graphics.Save();
             graphics.Dispose();
             return ret;
